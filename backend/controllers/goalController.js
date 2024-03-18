@@ -6,7 +6,7 @@ const Goal = require("../models/goalModel");
 const getGoals = asyncHandler(async (req, res) => {
   console.log(req.body);
   const goals = await Goal.find();
-  res.status(200).json({ message: "get goals" });
+  res.status(200).json(goals);
 });
 
 // @desc set goal
@@ -33,10 +33,10 @@ const putGoals = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("goal not found");
   }
-  const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
+  const updatedGoals = await Goal.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   })
-    .status(200)
+    res.status(200)
     .json(updatedGoals);
 });
 
@@ -44,12 +44,12 @@ const putGoals = asyncHandler(async (req, res) => {
 //@route delete /api/goals
 //@access Private
 const deleteGoals = asyncHandler(async (req, res) => {
-  const goals = await Goal.findByIdAndUpdate(req.params.id);
+  const goals = await Goal.findById(req.params.id);
   if (!goals) {
     res.status(400);
     throw new Error("goal not found");
   }
-  await goals.remove()
+  await goals.deleteOne({id:req.params.id})
   res.status(200).json({ id:req.params.id });
 });
 
