@@ -5,7 +5,7 @@ const User = require("../models/userModel");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-    // console.log(req.body,"kjkjfg");
+  // console.log(req.body,"kjkjfg");
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please add all fields");
@@ -22,7 +22,7 @@ const registerUser = asyncHandler(async (req, res) => {
   // Hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
-console.log(hashedPassword,"hash");
+  console.log(hashedPassword, "hash");
   // Create user
   const user = await User.create({
     name,
@@ -63,12 +63,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const getMe = asyncHandler(async (req, res) => {
-  const { _id, name, email } = await User.findById(req.user.id);
-  res.status(200).json({
-    id: _id,
-    name,
-    email,
-  });
+  res.status(200).json(req.user);
 });
 
 // generate token
